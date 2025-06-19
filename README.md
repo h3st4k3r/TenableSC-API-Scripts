@@ -35,6 +35,12 @@ pip install requests pandas urllib3
 python3 export_last_month_vulns.py
 ```
 
+![image](https://github.com/user-attachments/assets/2ef12413-2798-4c95-97b7-e965bc6cea8d)
+
+
+![image](https://github.com/user-attachments/assets/f9466bfb-c6af-4f3d-92c6-524062c5fe52)
+
+
 3. The script will:
    - Request all vulnerability data seen in the last 30 days
    - Flatten all JSON fields that include a `name` key (e.g., `severity`, `repository`)
