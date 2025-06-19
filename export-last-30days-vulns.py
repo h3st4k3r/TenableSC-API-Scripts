@@ -157,8 +157,25 @@ def flatten_json_fields(results):
                 r[field] = r[field]["name"]
     return results
 
+def convert_timestamps(results):
+    time_fields = [
+        "firstSeen", "lastSeen", "firstDiscovered", "lastObserved",
+        "patchPublicationDate", "pluginPublicationDate", "pluginModificationDate",
+        "vulnPublicationDate", "exportDate"
+    ]
+    for r in results:
+        for field in time_fields:
+            if field in r and isinstance(r[field], (int, float, str)):
+                try:
+                    ts = int(r[field])
+                    r[field] = datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
+                except:
+                    pass
+    return results
+
 results = fetch_all_results()
 results = flatten_json_fields(results)
+results = convert_timestamps(results)
 print(f"Total extracted results: {len(results)}")
 df = pd.DataFrame(results)
 print("DataFrame columns:")
