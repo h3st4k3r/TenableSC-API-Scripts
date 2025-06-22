@@ -3,7 +3,7 @@
 """
 Tenable.sc Vulnerability Export Script (from environment config)
 
-Extracts vulnerabilities from the past 30 days from Tenable.sc and exports them to CSV.
+Extracts vulnerabilities from the past N days from Tenable.sc and exports them to CSV.
 Configuration is pulled from environment variables set by main_controller.
 
 Author: h3st4k3r
@@ -175,12 +175,20 @@ def convert_timestamps(results):
                     pass
     return results
 
-results = fetch_all_results()
-results = flatten_json_fields(results)
-results = convert_timestamps(results)
-print(f"Total extracted results: {len(results)}")
-df = pd.DataFrame(results)
-print("DataFrame columns:")
-print(df.columns.tolist())
-df.to_csv("exportsc_vulns.csv", index=False)
-print("Export to exportsc_vulns.csv completed.")
+if __name__ == "__main__":
+    try:
+        repo_id = int(input("Enter repository ID: "))
+        days = int(input("Enter number of days to extract (e.g. 30): "))
+        body["query"]["filters"][0]["value"] = f"0:{days}"
+        body["query"]["filters"][1]["value"][0]["id"] = repo_id
+        results = fetch_all_results()
+        results = flatten_json_fields(results)
+        results = convert_timestamps(results)
+        print(f"Total extracted results: {len(results)}")
+        df = pd.DataFrame(results)
+        print("DataFrame columns:")
+        print(df.columns.tolist())
+        df.to_csv("exportsc_vulns.csv", index=False)
+        print("Export to exportsc_vulns.csv completed.")
+    except Exception as e:
+        print(f"[!] Error occurred: {e}")
