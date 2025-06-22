@@ -1,12 +1,14 @@
 # TenableSC-API-Scripts
 
-Scripts to interact with Tenable.sc via its REST API. Includes modules for extracting vulnerability data, downloading completed reports, and a central launcher script to handle execution and configuration.
+Scripts to interact with Tenable.sc via its REST API. Includes modules for extracting vulnerability data, downloading completed reports, extracting user and dashboard metadata, and a central launcher script to handle execution and configuration.
 
 ## Project Structure
 
-* `main_controller.py` — Unified launcher with internal config for API key and URL. Dispatches modules.
+* `main.py` — Unified launcher with internal config for API key and URL. Dispatches modules.
 * `export_last_month_vulns.py` — Extracts vulnerabilities from the last 30 days.
 * `download_completed_reports.py` — Downloads completed reports for a specific month.
+* `extract_users.py` — Exports Tenable.sc user information to CSV.
+* `extract_dashboards.py` — Exports dashboard metadata to JSON.
 
 ## Requirements
 
@@ -29,7 +31,7 @@ Extracts detailed vulnerability data from Tenable.sc, flattening nested fields a
 
 ### Features
 
-* Authenticates using environment variables set by the main controller
+* Authenticates using environment variables set by the main launcher
 * Uses `vulndetails` query with a 30-day filter (`firstSeen = 0:30`)
 * Handles pagination to extract all data
 * Converts nested JSON fields like `severity`, `repository`, and `plugin` into plain strings
@@ -39,7 +41,7 @@ Extracts detailed vulnerability data from Tenable.sc, flattening nested fields a
 ### Run
 
 ```bash
-python3 main_controller.py vulns
+python3 main.py vulns
 ```
 
 ---
@@ -59,7 +61,7 @@ Fetches and downloads all reports with `Completed` status for a user-specified m
 ### Run
 
 ```bash
-python3 main_controller.py reports
+python3 main.py reports
 ```
 
 You will be prompted:
@@ -71,31 +73,63 @@ Enter the month (1-12): 6
 
 ---
 
+## 3. User Export Tool
+
+Exports all users from Tenable.sc, including details like status, email, and last login date.
+
+### Output
+
+* CSV file: `tenable_users.csv`
+
+### Run
+
+```bash
+python3 main.py users
+```
+
+---
+
+## 4. Dashboard Metadata Extractor
+
+Retrieves all dashboard metadata and saves the output in structured JSON format.
+
+### Output
+
+* JSON file: `dashboards_metadata.json`
+
+### Run
+
+```bash
+python3 main.py dashboards
+```
+
+---
+
 ## Configuration
 
-The script `main_controller.py` contains all config:
+The script `main.py` contains the hardcoded configuration:
 
 ```python
 TENABLE_SC_URL = "https://your-tenablesc-url.com"
 TENABLE_SC_APIKEY = "accesskey=XXXXXXXXXXXXXX; secretkey=YYYYYYYYYYYYYY;"
 ```
 
-These are exported to environment variables and used by all other scripts:
+These values are passed to other scripts via environment variables:
 
 ```python
 os.environ["TENABLE_SC_URL"]
 os.environ["TENABLE_SC_APIKEY"]
 ```
 
-No need for external `.env` or JSON config files.
+No external config files are needed.
 
 ---
 
-## How to Add More Modules
+## Adding More Modules
 
-1. Create a new script and access config via `os.environ`.
-2. Add its name to the dispatcher block in `main_controller.py`.
-3. Use `argparse` inside your module if needed.
+1. Create a new script that reads `os.environ["TENABLE_SC_URL"]` and `TENABLE_SC_APIKEY`.
+2. Add its name to the dispatch block in `main.py`.
+3. Use your own CLI prompts or parameters as needed.
 
 ---
 
