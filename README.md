@@ -1,47 +1,29 @@
 # TenableSC API Toolkit
 
-This project provides a collection of Python scripts for interacting with **Tenable.sc** via its REST API. The toolkit allows security teams to extract vulnerabilities, download completed reports, retrieve user and dashboard metadata, and more.
-
----
+Scripts to interact with Tenable.sc via its REST API. This toolkit includes modular components to extract vulnerability data, download reports, and fetch user and dashboard information. A centralized launcher script (`main.py`) handles configuration and execution.
 
 ## Project Structure
 
 ```
 .
-├── main.py                    # Main launcher script
-├── requirements.txt           # Project dependencies
-├── LICENSE                    # MIT License
-├── README.md                  # This documentation file
-├── src/                       # All functional modules
-│   ├── export_last_month_vulns.py
+├── LICENSE
+├── README.md
+├── main.py
+├── requirements.txt
+├── src
 │   ├── download_completed_reports.py
-│   ├── extract_users.py
-│   └── extract_dashboards.py
-└── .github/workflows/         # GitHub Actions CI
-    └── run-tests.yml
+│   ├── export_last_month_vulns.py
+│   ├── extract_dashboards.py
+│   └── extract_users.py
+└── .github
+    └── workflows
+        └── run-tests.yml
 ```
-
----
-
-## Features
-
-* Query Tenable.sc REST API
-* Export vulnerabilities from the last 30 days
-* Download completed reports by year and month
-* Retrieve metadata on users and dashboards
-* All modules are launched via a unified CLI controller (`main.py`)
-* Simple environment-based configuration (no external secrets file required)
-
----
 
 ## Requirements
 
-* Python 3.10+
-* Modules:
-
-  * `requests`
-  * `pandas`
-  * `urllib3`
+- Python 3.x
+- pip
 
 Install dependencies:
 
@@ -49,57 +31,85 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
----
+Dependencies used:
+
+```
+requests
+pandas
+urllib3
+pytest
+```
 
 ## Usage
 
-Run a module with:
+The entry point for the toolkit is `main.py`. It includes the configuration for Tenable.sc and dispatches execution to the selected module.
 
-```bash
-python main.py <module>
-```
-
-Available modules:
-
-* `vulns` — Export vulnerabilities from the last 30 days
-* `reports` — Download completed reports for a user-defined month/year
-* `users` — Retrieve all users and export to CSV
-* `dashboards` — Retrieve all dashboards and export to CSV
-
-### Example:
-
-```bash
-python main.py reports
-```
-
-Then provide input:
-
-```
-Enter the year (YYYY): 2025
-Enter the month (1-12): 6
-```
-
----
-
-## Configuration
-
-Edit `main.py` and set your Tenable.sc base URL and API key directly:
+### Configure the API (inside `main.py`)
 
 ```python
 TENABLE_SC_URL = "https://your-tenablesc-url.com"
 TENABLE_SC_APIKEY = "accesskey=XXXXXXXXXXXXXX; secretkey=YYYYYYYYYYYYYY;"
 ```
 
-These values are exported as environment variables and accessed in all `src/*.py` modules.
+These values are exported via environment variables to be used by all modules.
 
----
+### Run a module
+
+From the project root:
+
+```bash
+python3 main.py vulns       # Export vulnerability data
+python3 main.py reports     # Download completed reports
+python3 main.py users       # Extract user data
+python3 main.py dashboards  # Extract dashboard metadata
+```
+
+Each module handles its own logic, API calls, pagination, formatting, and output.
+
+## GitHub Actions CI
+
+GitHub Actions is configured to automatically run tests when pushing or opening pull requests.
+
+Workflow file: `.github/workflows/run-tests.yml`
+
+```yaml
+name: Run Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest tests/
+```
+
+> Make sure to create a `tests/` directory with at least one test file (e.g. `test_dummy.py`) to validate the setup.
+
+## Contributing
+
+Feel free to fork and contribute. Focus areas for future improvement:
+
+- Add unit tests with mock responses
+- Implement logging instead of print statements
+- Support `.env` or secure credential storage (optional)
+- Dockerize execution (optional)
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
----
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Author
 
-Created by **h3st4k3r** — Hacking, Cyber Intelligence && Threat Hunting tools | From the comunity to the comunity.
+h3st4k3r
