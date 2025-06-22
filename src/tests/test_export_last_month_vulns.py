@@ -1,3 +1,4 @@
+import src.export_last_month_vulns as mod
 from unittest.mock import patch, Mock
 
 @patch("requests.post")
