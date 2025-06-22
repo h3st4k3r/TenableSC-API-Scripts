@@ -5,7 +5,7 @@ Scripts to interact with Tenable.sc via its REST API. This toolkit includes modu
 ## Project Structure
 
 ```
-.
+
 ├── LICENSE
 ├── README.md
 ├── main.py
