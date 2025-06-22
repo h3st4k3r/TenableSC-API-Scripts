@@ -112,4 +112,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Author
 
-h3st4k3r
+[h3st4k3r](https://github.com/h3st4k3r)
