@@ -26,13 +26,21 @@ os.environ["TENABLE_SC_APIKEY"] = TENABLE_SC_APIKEY
 
 def main():
     parser = argparse.ArgumentParser(description="Tenable.sc Script Controller")
-    parser.add_argument("module", choices=["vulns", "reports"], help="Module to run: 'vulns' or 'reports'")
+    parser.add_argument(
+        "module",
+        choices=["vulns", "reports", "users", "dashboards"],
+        help="Module to run: 'vulns', 'reports', 'users', or 'dashboards'"
+    )
     args = parser.parse_args()
 
     if args.module == "vulns":
         import export_last_month_vulns
     elif args.module == "reports":
         import download_completed_reports
+    elif args.module == "users":
+        import extract_users
+    elif args.module == "dashboards":
+        import extract_dashboards
     else:
         print("[ERROR] Unknown module.")
         sys.exit(1)
