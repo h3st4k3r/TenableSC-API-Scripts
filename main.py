@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Tenable.sc API Script Launcher (Hardcoded Configuration)
+Tenable.sc API Script Launcher (Hardcoded Configuration with src/ layout)
 
 Executes specific modules depending on command-line arguments.
 The API URL and key are defined directly in this file and made available
@@ -22,8 +22,11 @@ TENABLE_SC_APIKEY = "accesskey=XXXXXXXXXXXXXX; secretkey=YYYYYYYYYYYYYY;"
 os.environ["TENABLE_SC_URL"] = TENABLE_SC_URL
 os.environ["TENABLE_SC_APIKEY"] = TENABLE_SC_APIKEY
 
-# Entry point dispatcher
+# Add src directory to sys.path for module resolution
+SRC_PATH = os.path.join(os.path.dirname(__file__), "src")
+sys.path.insert(0, SRC_PATH)
 
+# Entry point dispatcher
 def main():
     parser = argparse.ArgumentParser(description="Tenable.sc Script Controller")
     parser.add_argument(
