@@ -177,10 +177,15 @@ def convert_timestamps(results):
 
 if __name__ == "__main__":
     try:
-        repo_id = int(input("Enter repository ID: "))
-        days = int(input("Enter number of days to extract (e.g. 30): "))
-        body["query"]["filters"][0]["value"] = f"0:{days}"
-        body["query"]["filters"][1]["value"][0]["id"] = repo_id
+        user_input_repo = input("Enter repository ID (or press Enter to use default 1133): ").strip()
+        user_input_days = input("Enter number of days to extract (default 30): ").strip()
+
+        if user_input_repo:
+            body["query"]["filters"][1]["value"][0]["id"] = int(user_input_repo)
+
+        if user_input_days:
+            body["query"]["filters"][0]["value"] = f"0:{int(user_input_days)}"
+
         results = fetch_all_results()
         results = flatten_json_fields(results)
         results = convert_timestamps(results)
