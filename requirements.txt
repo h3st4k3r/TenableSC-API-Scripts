@@ -1,0 +1,4 @@
+requests
+pandas
+urllib3
+pytest
