@@ -11,13 +11,10 @@ Scripts to interact with Tenable.sc via its REST API. This toolkit includes modu
 ├── main.py
 ├── requirements.txt
 ├── src
-│   ├── download_completed_reports.py
-│   ├── export_last_month_vulns.py
-│   ├── extract_dashboards.py
-│   └── extract_users.py
-└── .github
-    └── workflows
-        └── run-tests.yml
+    ├── download_completed_reports.py
+    ├── export_last_month_vulns.py
+    ├── extract_dashboards.py
+    └── extract_users.py
 ```
 
 ## Requirements
@@ -37,7 +34,6 @@ Dependencies used:
 requests
 pandas
 urllib3
-pytest
 ```
 
 ## Usage
@@ -59,43 +55,12 @@ From the project root:
 
 ```bash
 python3 main.py vulns       # Export vulnerability data
-python3 main.py reports     # Download completed reports
+python3 main.py reports     # Download completed reports (pdf-csv during period of time)
 python3 main.py users       # Extract user data
-python3 main.py dashboards  # Extract dashboard metadata
+python3 main.py dashboards  # Extract dashboard data
 ```
 
 Each module handles its own logic, API calls, pagination, formatting, and output.
-
-## GitHub Actions CI
-
-GitHub Actions is configured to automatically run tests when pushing or opening pull requests.
-
-Workflow file: `.github/workflows/run-tests.yml`
-
-```yaml
-name: Run Tests
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run tests
-        run: pytest tests/
-```
-
-> Make sure to create a `tests/` directory with at least one test file (e.g. `test_dummy.py`) to validate the setup.
 
 ## Contributing
 
