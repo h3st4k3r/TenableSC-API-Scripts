@@ -1,5 +1,3 @@
-import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from unittest.mock import patch, Mock
 
 @patch("requests.post")
@@ -19,6 +17,7 @@ def test_export_last_month_vulns(mock_get, mock_post, tmp_path):
     # Patch the output filename to use a temp file
     output_file = tmp_path / "exported_vulns.csv"
 
+    # ✅ Importa el módulo UNA SOLA VEZ (aquí es suficiente)
     import src.export_last_month_vulns as mod
 
     # Patch the open to write to temp file instead
