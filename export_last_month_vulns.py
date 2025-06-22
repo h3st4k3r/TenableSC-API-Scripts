@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Tenable.sc Vulnerability Export Script
+Tenable.sc Vulnerability Export Script (from environment config)
 
-This script extracts vulnerability data from Tenable.sc over the past 30 days,
-applies pagination, flattens nested fields (e.g. severity, plugin, repository),
-and exports the results to a CSV file.
+Extracts vulnerabilities from the past 30 days from Tenable.sc and exports them to CSV.
+Configuration is pulled from environment variables set by main_controller.
 
 Author: h3st4k3r
-Version: 1.0
+Version: 1.1
 """
 
+import os
 import requests
 import time
 import pandas as pd
 import urllib3
+from datetime import datetime
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-url = "https://XXXXXXXXXXXXX.com/rest/analysis"
+url = os.environ.get("TENABLE_SC_URL") + "/rest/analysis"
+api_key = os.environ.get("TENABLE_SC_APIKEY")
 headers = {
-    "x-apikey": "accesskey=XXXXXXXXXXX; secretkey=XXXXXXXXXXXX",
+    "x-apikey": api_key,
     "Content-Type": "application/json"
 }
 
