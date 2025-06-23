@@ -38,6 +38,7 @@ def main():
 
     if args.module == "vulns":
         import export_last_month_vulns
+        export_last_month_vulns.main(repo_id=1133, days=30)
     elif args.module == "reports":
         import download_completed_reports
     elif args.module == "users":
