@@ -175,16 +175,19 @@ def convert_timestamps(results):
                     pass
     return results
 
-if __name__ == "__main__":
+def main(repo_id=None, days=None):
+    print("Vulns script: TENABLE_SC_URL =", url)
+    print("Vulns script: TENABLE_SC_APIKEY =", api_key)
     try:
-        user_input_repo = input("Enter repository ID (or press Enter to use default 1133): ").strip()
-        user_input_days = input("Enter number of days to extract (default 30): ").strip()
+        if repo_id is None:
+            repo_input = input("Enter repository ID (or press Enter to use default 1133): ").strip()
+            repo_id = int(repo_input) if repo_input else 1133
+        if days is None:
+            days_input = input("Enter number of days to extract (default 30): ").strip()
+            days = int(days_input) if days_input else 30
 
-        if user_input_repo:
-            body["query"]["filters"][1]["value"][0]["id"] = int(user_input_repo)
-
-        if user_input_days:
-            body["query"]["filters"][0]["value"] = f"0:{int(user_input_days)}"
+        body["query"]["filters"][1]["value"][0]["id"] = repo_id
+        body["query"]["filters"][0]["value"] = f"0:{days}"
 
         results = fetch_all_results()
         results = flatten_json_fields(results)
@@ -197,3 +200,7 @@ if __name__ == "__main__":
         print("Export to exportsc_vulns.csv completed.")
     except Exception as e:
         print(f"[!] Error occurred: {e}")
+
+
+if name == "main":
+    main()
